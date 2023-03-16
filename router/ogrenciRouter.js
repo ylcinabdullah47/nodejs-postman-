@@ -37,19 +37,19 @@ router.post('/',(req,res) =>{
 
 //silme işlemi 
 
-router.delete('//:id',(req,res)=>{
-    const silinece_id = req.params.id;
-    const silinecek_ogrenci = data.find(ogrenci => ogrenci.id === number(silinece_id));
+router.delete('/:id',(req,res)=>{
+    const silinece_id = parseInt(req.params.id);
+    const silinecek_ogrenci = data.find(ogrenci => ogrenci.id === silinece_id);
 
     if (silinece_id) {
-        data =data.filter(ogrenci=>ogrenci.id !== number(silinece_id))
+        data =data.filter(ogrenci=>ogrenci.id !== silinece_id)
         res.send(204).end();
     }else{
         res.status(404).send("Silinecek öğrenci bulunamadı.")
     }
 });
 
-router.put('//:id',(req,res)=>{
+router.put('/:id',(req,res)=>{
     const guncellenecek_id = req.params.id;
     const guncellenecek_ogrenci = data.find(ogrenci => ogrenci.id === parseInt(guncellenecek_id));
 
