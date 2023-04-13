@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <form>
+    <label for="language">Dil Seç:</label>
+    <select id="language" name="language">
+      <option value="en-US">İngilizce (ABD)</option>
+      <option value="tr-TR">Türkçe</option>
+      <option value="fr-FR">Fransızca</option>
+    </select>
+    <br>
+    
+    <br>
+    <label for="text">Metin:</label>
+    <textarea name="text" id="text" rows="5" cols="30"></textarea>
+  
+    <button id="listenBtn">Dinle</button>
+    <button id="downloadBtn">İndir</button>
+  
+    <audio id="audio"></audio>
+  </form>
+
+  <script>
+    const listenButton = document.getElementById("listenBtn");
+const audio = document.getElementById("audio");
+const language = document.getElementById("language");
+const text = document.getElementById("text");
+
+listenButton.addEventListener("click", async () => {
+    try {
+        const response = await axios.post('https://sesdeneme.cognitiveservices.azure.com/', {
+            headers: {
+                'Authorization': '91692a330a0e42199729969aff52fefd',
+                'Content-Type': 'application/ssml+xml'
+            },
+            data: `
+                <speak version='1.0' xml:lang='${language.value}'>
+                    <voice xml:lang='${language.value}' xml:gender='Female'>${text.value}</voice>
+                </speak>
+            `
+        });
+
+        const audioUrl = window.URL.createObjectURL(new Blob([response.data], {type: 'audio/mp3'}));
+        audio.src = audioUrl;
+        audio.play();
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+  </script>
+</body>
+</html>
